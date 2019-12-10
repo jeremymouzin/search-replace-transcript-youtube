@@ -1,0 +1,32 @@
+{
+  "name": "search-replace-transcript-youtube",
+  "version": "1.0.0",
+  "description": "This extension lets you search and replace words while editing your YouTube video transcripts in the official online editor.",
+  "main": "popup.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.9.0"
+  },
+  "scripts": {
+    "test": "jest tests/tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremymouzin/search-replace-transcript-youtube.git"
+  },
+  "keywords": [
+    "youtube",
+    "chrome",
+    "extension",
+    "transcript"
+  ],
+  "author": "Jérémy Mouzin",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/jeremymouzin/search-replace-transcript-youtube/issues"
+  },
+  "homepage": "https://github.com/jeremymouzin/search-replace-transcript-youtube#readme"
+}

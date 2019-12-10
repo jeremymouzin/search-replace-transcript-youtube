@@ -1,0 +1,32 @@
+{
+  "name": "Search Replace Transcript YouTube",
+  "version": "1.0",
+  "description": "This extension lets you search and replace words while editing your YouTube video transcripts in the official online editor.",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon/icon16.png",
+      "32": "icon/icon32.png",
+      "48": "icon/icon48.png",
+      "128": "icon/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon/icon16.png",
+    "32": "icon/icon32.png",
+    "48": "icon/icon48.png",
+    "128": "icon/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/timedtext_editor*"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  "permissions": ["declarativeContent", "activeTab"],
+  "manifest_version": 2
+}

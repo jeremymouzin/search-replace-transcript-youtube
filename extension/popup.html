@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Search and replace in YouTube transcripts</title>
+    <style>
+      body {
+        font-size: 1.2em;
+        padding: 1em;
+      }
+
+      body > h1 {
+        margin-top: 0;
+      }
+
+      input, button {
+        border-radius: 6px;
+        margin: 1em 0;
+        border: cornflowerblue solid 4px;
+      }
+
+      input[type="text"] {
+        height: 2em;
+        padding: 0.4em 0.8em;
+        font-size: 1em;
+      }
+
+      input:focus {
+        outline: none;
+        box-shadow: rebeccapurple 0px 0px 4px 0px;
+        transition: all .3s ease-in-out;
+      }
+
+      input[type="submit"], button {
+        width: 100%;
+        background-color: cornflowerblue;
+        font-size: 1em;
+        height: 3em;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Search and replace</h1>
+    <form id="form">
+      <label for="search">Search for...</label>
+      <input type="text" name="search" id="search" autofocus />
+      <label for="replace">and replace by...</label>
+      <input type="text" name="replace" id="replace" />
+      <input type="submit" value="Replace" />
+    </form>
+
+    <button id="preprocessButton">Preprocess</button>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
