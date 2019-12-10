@@ -27,6 +27,15 @@
       "js": ["contentScript.js"]
     }
   ],
+  "commands": {
+    "_execute_page_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "windows": "Ctrl+Shift+F",
+        "mac": "MacCtrl+Shift+F"
+      }
+    }
+  },
   "permissions": ["declarativeContent", "activeTab"],
   "manifest_version": 2
 }
