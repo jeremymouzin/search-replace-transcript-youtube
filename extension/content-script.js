@@ -35,15 +35,40 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression)
   let lastTextAreaModified;
 
   const updatedCaptionsList = captionsList.map((textArea) => {
+    // Manage the search of a several words expression on multiple lines
+    const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
+    let robustReplacementExpression = replacementExpression;
+
     // We use a RegExp to replace *all* occurences of the searched expression
-    const searchRegExp = new RegExp(`\\b${searchExpression}\\b`, 'g');
+    let searchRegExp = new RegExp(`\\b${robustSearchExpression}\\b`, 'g');
     const originalText = textArea.textContent;
 
-    if (searchRegExp.test(originalText)) {
-      const newReplacedExpression = originalText.replace(searchRegExp, replacementExpression);
+    const result = searchRegExp.exec(originalText);
+    if (result !== null) {
+      const match = result[0];
+      /**
+       * If it's several words on different lines, manage the new line correctly
+       * and include any trailing char that is not a space (like a comma, a dot etc.)
+       */
+      if (match.includes('\n')) {
+        const trailingChar = originalText[searchRegExp.lastIndex];
+
+        if (trailingChar !== ' ') {
+          robustReplacementExpression += trailingChar;
+        }
+        robustReplacementExpression += '\n';
+        searchRegExp = new RegExp(`\\b${robustSearchExpression}${trailingChar}[ ]*`, 'g');
+      }
+
+      const newReplacedExpression = originalText.replace(searchRegExp, robustReplacementExpression);
+
+      // Update textarea inputs values
       textArea.textContent = newReplacedExpression;
       textArea.value = newReplacedExpression;
+
+      // Store the last modified item to dispatch the fake event on it
       lastTextAreaModified = textArea;
+
       return newReplacedExpression;
     }
 
