@@ -36,7 +36,7 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression)
 
   const updatedCaptionsList = captionsList.map((textArea) => {
     // We use a RegExp to replace *all* occurences of the searched expression
-    const searchRegExp = new RegExp(searchExpression, 'g');
+    const searchRegExp = new RegExp(`\\b${searchExpression}\\b`, 'g');
     const originalText = textArea.textContent;
 
     if (searchRegExp.test(originalText)) {

@@ -1,30 +1,71 @@
 const searchAndReplace = require('../extension/content-script');
 
+// Mimick the textarea HTML input of the document
 function fakeTextArea(textContent) {
   return {
     textContent,
     value: textContent,
-    dispatchEvent: () => {},
+    dispatchEvent: () => { },
   };
 }
-/* A simple test example */
 
-it('should replace a word with the replacement', () => {
-  const captions = [fakeTextArea(`The dom is awesome and is
-even better in uppercase!`)];
-  const updatedCaptions = [`The DOM is awesome and is
-even better in uppercase!`,
+describe('Single word replacements', () => {
+  it('should replace a single word on the first line', () => {
+    const captions = [fakeTextArea(`The dom is awesome and is
+even better in uppercase`)];
+    const updatedCaptions = [`The DOM is awesome and is
+even better in uppercase`,
+    ];
+    expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
+  });
+
+  it('should replace a single word on the second line', () => {
+    const captions = [fakeTextArea(`It's better to spell
+dom in uppercase`)];
+    const updatedCaptions = [`It's better to spell
+DOM in uppercase`,
+    ];
+    expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
+  });
+
+  it('should replace only the whole word', () => {
+    const captions = [fakeTextArea(`The dominant language to
+manipulate the dom is JavaScript`)];
+    const updatedCaptions = [`The dominant language to
+manipulate the DOM is JavaScript`,
+    ];
+    expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
+  });
+});
+/*
+it('should manage spaces in search expression', () => {
+  const captions = [fakeTextArea(`The java script language
+is great when spelled correctly`)];
+  const updatedCaptions = [`The JavaScript language
+is great when spelled correctly`,
   ];
-  expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
+  expect(searchAndReplace(captions, 'java script', 'JavaScript')).toEqual(updatedCaptions);
+});
+
+it('should manage multiples words in search expression', () => {
+  const captions = [fakeTextArea(`An IDE like visual studio code
+is great when spelled correctly`)];
+  const updatedCaptions = [`An IDE like Visual Studio Code
+is great when spelled correctly`,
+  ];
+  expect(searchAndReplace(captions, 'visual studio code', 'Visual Studio Code')).toEqual(updatedCaptions);
+});
+
+it('should handle 2-words expressions broken on two different lines', () => {
+  const captions = [fakeTextArea(`Starting to learn the java
+script language is a good idea`)];
+  const updatedCaptions = [`Starting to learn the JavaScript
+language is a good idea`,
+  ];
+  expect(searchAndReplace(captions, 'java script', 'JavaScript')).toEqual(updatedCaptions);
 });
 
 /* Draft about what's need to be tested later */
-
-// const expressionsToFix = [
-//   ["javascript", "JavaScript"],
-//   ["java script", "JavaScript"],
-//   ["visual studio code", "Visual Studio Code"],
-// ]
 
 // const test0 = `Grâce à visual studio
 // code, vous pouvez faire...`;
