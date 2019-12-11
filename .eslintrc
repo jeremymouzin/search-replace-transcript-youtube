@@ -1,5 +1,8 @@
 {
-  "extends": "airbnb-base",
+  "extends": [
+    "airbnb-base",
+    "plugin:jest/recommended",
+  ],
   "rules": {
     "no-param-reassign": [
       "error",
@@ -13,5 +16,9 @@
         "code": 120,
       }
     ],
+  },
+  "plugins": ["jest"],
+  "env": {
+    "jest/globals": true,
   },
 }
