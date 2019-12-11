@@ -11,7 +11,7 @@
     "jest": "^24.9.0"
   },
   "scripts": {
-    "test": "jest tests/tests.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
