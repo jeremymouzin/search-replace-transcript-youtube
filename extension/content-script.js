@@ -31,10 +31,10 @@ function dispatchFakeEvent(element) {
   element.dispatchEvent(event);
 }
 
-function replace(searchExpression, replacementExpression) {
-  let lastTestAreaModified;
+function searchAndReplace(captionsList, searchExpression, replacementExpression) {
+  let lastTextAreaModified;
 
-  [...document.querySelectorAll('textarea')].forEach((textArea) => {
+  const updatedCaptionsList = captionsList.map((textArea) => {
     // We use a RegExp to replace *all* occurences of the searched expression
     const searchRegExp = new RegExp(searchExpression, 'g');
     const originalText = textArea.textContent;
@@ -43,21 +43,26 @@ function replace(searchExpression, replacementExpression) {
       const newReplacedExpression = originalText.replace(searchRegExp, replacementExpression);
       textArea.textContent = newReplacedExpression;
       textArea.value = newReplacedExpression;
-      lastTestAreaModified = textArea;
+      lastTextAreaModified = textArea;
+      return newReplacedExpression;
     }
+
+    return originalText;
   });
 
   // We dispatch an event only when we have at least a match
-  if (lastTestAreaModified) {
-    dispatchFakeEvent(lastTestAreaModified);
+  if (lastTextAreaModified) {
+    dispatchFakeEvent(lastTextAreaModified);
   }
+
+  return updatedCaptionsList;
 }
 
 // This is the hook for unit testing with Jest
 // The module object is not defined when running the extension in Chrome. To avoid
 // any issue, we execute the affectation only when we run the tests (ie when module is defined).
 if (typeof module !== 'undefined') {
-  module.exports = replace;
+  module.exports = searchAndReplace;
 }
 
 /**
@@ -66,8 +71,10 @@ if (typeof module !== 'undefined') {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const { searchExpression, replacementExpression } = request;
 
+  const captionsList = [...document.querySelectorAll('textarea')];
+
   if (searchExpression && replacementExpression) {
-    replace(searchExpression, replacementExpression);
+    searchAndReplace(captionsList, searchExpression, replacementExpression);
   }
 
   if (request.preprocess) {
@@ -76,7 +83,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ['vs code', 'VSCode'],
       ['javascript', 'JavaScript'],
     ];
-    preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => replace(wordsToSearchFor, replacement));
+    preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => searchAndReplace(wordsToSearchFor, replacement));
   }
 
   sendResponse({ data: 'done' });

@@ -8,5 +8,6 @@ module.exports = {
         },
       },
     },
+    InputEvent: function InputEvent() {},
   },
 };

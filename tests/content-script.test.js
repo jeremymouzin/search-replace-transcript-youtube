@@ -1,9 +1,21 @@
-const replace = require('../extension/content-script');
+const searchAndReplace = require('../extension/content-script');
 
+function fakeTextArea(textContent) {
+  return {
+    textContent,
+    value: textContent,
+    dispatchEvent: () => {},
+  };
+}
 /* A simple test example */
 
-it('should return undefined', () => {
-  expect(replace('dom', 'DOM')).toBe(undefined);
+it('should replace a word with the replacement', () => {
+  const captions = [fakeTextArea(`The dom is awesome and is
+even better in uppercase!`)];
+  const updatedCaptions = [`The DOM is awesome and is
+even better in uppercase!`,
+  ];
+  expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
 });
 
 /* Draft about what's need to be tested later */
@@ -16,9 +28,9 @@ it('should return undefined', () => {
 
 // const test0 = `Grâce à visual studio
 // code, vous pouvez faire...`;
-// const test1 = `Vive le java  
+// const test1 = `Vive le java
 // script c'est génial`;
-// const test2 = ` Vive le javascript  
+// const test2 = ` Vive le javascript
 //   c'est génial    `;
 
 // expressionsToFix.forEach(([expressionToSearch, replacement]) => {
@@ -38,7 +50,7 @@ it('should return undefined', () => {
 //   "Thanks to visual studio"
 //   "code, you can use lots of..."
 //   2. Manage all words !
-//   3. Manage bad inputs from user (spaces before or after) 
+//   3. Manage bad inputs from user (spaces before or after)
 //   */
 //   let out = text.replace(/java([ \n])*script/, "JavaScript$1");
 //   // Remove any trailing spaces at the beginning and end of lines
@@ -48,4 +60,3 @@ it('should return undefined', () => {
 // ${out}`);
 //   console.log("---");
 // }
-
