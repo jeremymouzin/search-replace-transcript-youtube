@@ -18,6 +18,13 @@ function replace(searchExpression, replacementExpression) {
   }
 }
 
+// This is the hook for unit testing with Jest
+// The module object is not defined when running the extension in Chrome. To avoid
+// any issue, we execute the affectation only when we run the tests (ie when module is defined).
+if (typeof module !== 'undefined') {
+  module.exports = replace;
+}
+
 /**
  * We generate a fake event, as if we typed on the keyboard within a textarea to
  * modify a caption. This is needed to trigger the JavaScript code that handles
