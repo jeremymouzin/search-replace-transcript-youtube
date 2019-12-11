@@ -1,3 +1,17 @@
 {
-  "extends": "airbnb-base"
+  "extends": "airbnb-base",
+  "rules": {
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false,
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 120,
+      }
+    ],
+  },
 }

@@ -4,9 +4,9 @@ module.exports = {
     chrome: {
       runtime: {
         onMessage: {
-          addListener() {}
-        }
-      }
-    }
-  }
+          addListener() {},
+        },
+      },
+    },
+  },
 };
