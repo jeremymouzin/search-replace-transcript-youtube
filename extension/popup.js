@@ -7,7 +7,7 @@ form.onsubmit = function(element) {
   // Don't reload the page when submitting the form
   element.preventDefault();
 
-  // Get input values from the form and send them to the contentScript
+  // Get input values from the form and send them to the content-script
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     const searchExpression = searchInput.value;
     const replacementExpression = replaceInput.value;
