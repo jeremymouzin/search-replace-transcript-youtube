@@ -1,3 +1,19 @@
+/**
+ * Some definitions about the terms I use here.
+ *
+ * I call a subtitle a caption because originally, I made this to help me create captions for
+ * hearing-impaired audiences for my JavaScript training videos.
+ * But it can also be used for subtitles too: translating audio language to another language in text format
+ * for foreigners.
+ *
+ * The "search expression" is the expression the user search for in the captions.
+ * The "replacement expression" is the expression the user wants to use to replace the search expression
+ * in the captions.
+ *
+ * I call a "caption update" the fact of replacing the search expression by the replacement expression.
+ */
+
+
 /* eslint-disable jest/valid-describe */
 const searchAndReplace = require('../extension/content-script');
 
@@ -13,14 +29,15 @@ function fakeTextArea(textContent) {
 // Generic settings for tests
 const TIMEOUT_IN_MS = 200;
 
-// Generic functions to call to test caption update
-function testCaptionUpdate(testTitle, searchExpression, replaceExpression, captions, updatedCaptions) {
+// Generic functions to call to test caption updates
+function testCaptionUpdate(testTitle, searchExpression, replacementExpression, captions, updatedCaptions, options) {
   const fakeCaption = [fakeTextArea(captions)];
-  expect(searchAndReplace(fakeCaption, searchExpression, replaceExpression)).toEqual([updatedCaptions]);
+  expect(searchAndReplace(fakeCaption, searchExpression, replacementExpression, options)).toEqual([updatedCaptions]);
 }
 
-function groupTest(testTitle, testsData) {
-  it.each(testsData)('%s', testCaptionUpdate, TIMEOUT_IN_MS);
+function groupTest(testTitle, testsSet, options) {
+  const testsSetWithOptions = testsSet.map((data) => [...data, options]);
+  it.each(testsSetWithOptions)('%s', testCaptionUpdate, TIMEOUT_IN_MS);
 }
 
 /**
@@ -66,14 +83,23 @@ manipulate the DOM is JavaScript`,
   ],
 ];
 describe.each([
-  ['Single word replacements', singleWordsReplacementsTests],
+  [
+    'Single words replacements (case insensitive search OFF)',
+    singleWordsReplacementsTests,
+    { insensitiveSearch: false },
+  ],
+  [
+    'Single words replacements (case insensitive search ON)',
+    singleWordsReplacementsTests,
+    { insensitiveSearch: true },
+  ],
 ])('%s', groupTest, TIMEOUT_IN_MS);
 
 /**
  * Several words replacement tests
  */
 
-const severalWordsReplacementTests = [
+const severalWordsReplacementsTests = [
   [
     'should manage several words on the same line',
     'java script',
@@ -112,5 +138,63 @@ shall we?`,
   ],
 ];
 describe.each([
-  ['Several words replacement', severalWordsReplacementTests],
+  [
+    'Several words replacements (case insensitive search OFF)',
+    severalWordsReplacementsTests,
+    { insensitiveSearch: false },
+  ],
+  [
+    'Several words replacements (case insensitive search ON)',
+    severalWordsReplacementsTests,
+    { insensitiveSearch: true },
+  ],
+])('%s', groupTest, TIMEOUT_IN_MS);
+
+/**
+ * Case insensitive search tests
+ *
+ * To avoid creating new tests I use the previous ones and modify them to generate useful tests
+ * to check the correctness of the case insensitive search option.
+ *
+ * Weakness: I use array indexes to manipulate test data, it's not ideal because if the structure
+ * of the test changes, I'll have to update indexes values here too. I should change that...
+ */
+
+// Transforms a string like "javascript" to "JaVaScRiPt"
+function createCaseInconsistency(string) {
+  return [...string].map((letter, index) => (index % 2 ? letter : letter.toUpperCase())).join('');
+}
+
+function makeSearchExpressionsCaseInconsistent(testsData) {
+  return testsData.map((data) => data.map(
+    (searchExpression, index) => (index === 1 ? createCaseInconsistency(searchExpression) : searchExpression),
+  ));
+}
+
+// When the app should not update the caption, the original caption should be identical to the updated caption
+function makeOriginalCaptionIdenticalToUpdatedCaption(testData) {
+  return testData.map((data) => data.map((value, index) => (index === 4 ? data[3] : value)));
+}
+
+describe.each([
+  [
+    'Single word replacements with case inconsistencies (case insensitive search OFF)',
+    makeOriginalCaptionIdenticalToUpdatedCaption(makeSearchExpressionsCaseInconsistent(singleWordsReplacementsTests)),
+    { insensitiveSearch: false },
+  ],
+  [
+    'Single word replacements with case inconsistencies (case insensitive search ON)',
+    makeSearchExpressionsCaseInconsistent(singleWordsReplacementsTests),
+    { insensitiveSearch: true },
+  ],
+  [
+    'Several words replacements with case inconsistencies (case insensitive search OFF)',
+    makeOriginalCaptionIdenticalToUpdatedCaption(makeSearchExpressionsCaseInconsistent(severalWordsReplacementsTests)),
+    { insensitiveSearch: false },
+  ],
+  [
+    'Several words replacements with case inconsistencies (case insensitive search ON)',
+    makeSearchExpressionsCaseInconsistent(severalWordsReplacementsTests),
+    { insensitiveSearch: true },
+  ],
 ])('%s', groupTest, TIMEOUT_IN_MS);

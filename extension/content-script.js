@@ -31,14 +31,15 @@ function dispatchFakeEvent(element) {
   element.dispatchEvent(event);
 }
 
-function searchAndReplace(captionsList, searchExpression, replacementExpression) {
+function searchAndReplace(captionsList, searchExpression, replacementExpression, options) {
   const updatedCaptionsList = captionsList.map((textArea) => {
     // Manage the search of a several words expression on multiple lines
     const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
     let robustReplacementExpression = replacementExpression;
 
     // We use a RegExp to replace *all* occurences of the searched expression
-    let searchRegExp = new RegExp(`\\b${robustSearchExpression}\\b`, 'g');
+    const searchRegExpFlags = options.insensitiveSearch ? 'gi' : 'g';
+    let searchRegExp = new RegExp(`\\b${robustSearchExpression}\\b`, searchRegExpFlags);
     const originalText = textArea.value;
 
     const result = searchRegExp.exec(originalText);
@@ -55,7 +56,7 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression)
           robustReplacementExpression += trailingChar;
         }
         robustReplacementExpression += '\n';
-        searchRegExp = new RegExp(`\\b${robustSearchExpression}${trailingChar}[ ]*`, 'g');
+        searchRegExp = new RegExp(`\\b${robustSearchExpression}${trailingChar}[ ]*`, searchRegExpFlags);
       }
 
       const newReplacedExpression = originalText.replace(searchRegExp, robustReplacementExpression);
@@ -87,12 +88,12 @@ if (typeof module !== 'undefined') {
  * Listen to requests coming from the popup form
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  const { searchExpression, replacementExpression } = request;
+  const { searchExpression, replacementExpression, options } = request;
 
   const captionsList = [...document.querySelectorAll('textarea')];
 
   if (searchExpression && replacementExpression) {
-    searchAndReplace(captionsList, searchExpression, replacementExpression);
+    searchAndReplace(captionsList, searchExpression, replacementExpression, options);
   }
 
   if (request.preprocess) {
@@ -101,7 +102,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ['vs code', 'VSCode'],
       ['javascript', 'JavaScript'],
     ];
-    preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => searchAndReplace(wordsToSearchFor, replacement));
+    preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => searchAndReplace(wordsToSearchFor, replacement, options));
   }
 
   sendResponse({ data: 'done' });
