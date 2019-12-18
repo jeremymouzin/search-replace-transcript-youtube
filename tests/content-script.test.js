@@ -10,77 +10,89 @@ function fakeTextArea(textContent) {
 }
 
 describe('Single word replacements', () => {
-  it('should not do anything when there is no match', () => {
-    const captions = [fakeTextArea(`There is nothing to replace
-in this text, damn it!`)];
-    const updatedCaptions = [`There is nothing to replace
+  it.each([
+    [
+      'should not do anything when there is no match',
+      'dom',
+      'DOM',
+      `There is nothing to replace
 in this text, damn it!`,
-    ];
-    expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
-  });
-
-  it('should replace a single word on the first line', () => {
-    const captions = [fakeTextArea(`The dom is awesome and is
-even better in uppercase`)];
-    const updatedCaptions = [`The DOM is awesome and is
+      `There is nothing to replace
+in this text, damn it!`,
+    ],
+    [
+      'should replace a single word on the first line',
+      'dom',
+      'DOM',
+      `The dom is awesome and is
 even better in uppercase`,
-    ];
-    expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
-  });
-
-  it('should replace a single word on the second line', () => {
-    const captions = [fakeTextArea(`It's better to spell
-dom in uppercase`)];
-    const updatedCaptions = [`It's better to spell
+      `The DOM is awesome and is
+even better in uppercase`,
+    ],
+    [
+      'should replace a single word on the second line',
+      'dom',
+      'DOM',
+      `It's better to spell
+dom in uppercase`,
+      `It's better to spell
 DOM in uppercase`,
-    ];
-    expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
-  });
-
-  it('should replace only the whole word', () => {
-    const captions = [fakeTextArea(`The dominant language to
-manipulate the dom is JavaScript`)];
-    const updatedCaptions = [`The dominant language to
+    ],
+    [
+      'should replace only the whole word',
+      'dom',
+      'DOM',
+      `The dominant language to
+manipulate the dom is JavaScript`,
+      `The dominant language to
 manipulate the DOM is JavaScript`,
-    ];
-    expect(searchAndReplace(captions, 'dom', 'DOM')).toEqual(updatedCaptions);
+    ],
+  ])('%s', (testTitle, searchExpression, replaceExpression, captions, updatedCaptions) => {
+    const fakeCaption = [fakeTextArea(captions)];
+    expect(searchAndReplace(fakeCaption, searchExpression, replaceExpression)).toEqual([updatedCaptions]);
   });
 });
 
 describe('Several words replacement', () => {
-  it('should manage several words on the same line', () => {
-    const captions = [fakeTextArea(`The java script language
-is great when spelled correctly`)];
-    const updatedCaptions = [`The JavaScript language
+  it.each([
+    [
+      'should manage several words on the same line',
+      'java script',
+      'JavaScript',
+      `The java script language
 is great when spelled correctly`,
-    ];
-    expect(searchAndReplace(captions, 'java script', 'JavaScript')).toEqual(updatedCaptions);
-  });
-
-  it('should handle 2-words expressions broken on two different lines', () => {
-    const captions = [fakeTextArea(`Starting to learn the java
-script language is a good idea`)];
-    const updatedCaptions = [`Starting to learn the JavaScript
+      `The JavaScript language
+is great when spelled correctly`,
+    ],
+    [
+      'should handle 2-words expressions broken on two different lines',
+      'java script',
+      'JavaScript',
+      `Starting to learn the java
+script language is a good idea`,
+      `Starting to learn the JavaScript
 language is a good idea`,
-    ];
-    expect(searchAndReplace(captions, 'java script', 'JavaScript')).toEqual(updatedCaptions);
-  });
-
-  it('should handle several-words expressions broken on two different lines on the first word', () => {
-    const captions = [fakeTextArea(`Let's talk about visual
-studio code, shall we?`)];
-    const updatedCaptions = [`Let's talk about Visual Studio Code,
+    ],
+    [
+      'should handle several-words expressions broken on two different lines on the first word',
+      'visual studio code',
+      'Visual Studio Code',
+      `Let's talk about visual
+studio code, shall we?`,
+      `Let's talk about Visual Studio Code,
 shall we?`,
-    ];
-    expect(searchAndReplace(captions, 'visual studio code', 'Visual Studio Code')).toEqual(updatedCaptions);
-  });
-
-  it('should handle several-words expressions broken on two different lines on the second word', () => {
-    const captions = [fakeTextArea(`Let's talk about visual studio
-code, shall we?`)];
-    const updatedCaptions = [`Let's talk about Visual Studio Code,
+    ],
+    [
+      'should handle several-words expressions broken on two different lines on the second word',
+      'visual studio code',
+      'Visual Studio Code',
+      `Let's talk about visual studio
+code, shall we?`,
+      `Let's talk about Visual Studio Code,
 shall we?`,
-    ];
-    expect(searchAndReplace(captions, 'visual studio code', 'Visual Studio Code')).toEqual(updatedCaptions);
+    ],
+  ])('%s', (testTitle, searchExpression, replaceExpression, captions, updatedCaptions) => {
+    const fakeCaption = [fakeTextArea(captions)];
+    expect(searchAndReplace(fakeCaption, searchExpression, replaceExpression)).toEqual([updatedCaptions]);
   });
 });
