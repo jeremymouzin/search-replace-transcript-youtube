@@ -41,7 +41,7 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression)
 
     // We use a RegExp to replace *all* occurences of the searched expression
     let searchRegExp = new RegExp(`\\b${robustSearchExpression}\\b`, 'g');
-    const originalText = textArea.textContent;
+    const originalText = textArea.value;
 
     const result = searchRegExp.exec(originalText);
     if (result !== null) {
