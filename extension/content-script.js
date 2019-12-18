@@ -32,8 +32,6 @@ function dispatchFakeEvent(element) {
 }
 
 function searchAndReplace(captionsList, searchExpression, replacementExpression) {
-  let lastTextAreaModified;
-
   const updatedCaptionsList = captionsList.map((textArea) => {
     // Manage the search of a several words expression on multiple lines
     const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
@@ -66,19 +64,14 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression)
       textArea.textContent = newReplacedExpression;
       textArea.value = newReplacedExpression;
 
-      // Store the last modified item to dispatch the fake event on it
-      lastTextAreaModified = textArea;
+      // Dispatch a fake event so that YouTube system takes into account my modifications
+      dispatchFakeEvent(textArea);
 
       return newReplacedExpression;
     }
 
     return originalText;
   });
-
-  // We dispatch an event only when we have at least a match
-  if (lastTextAreaModified) {
-    dispatchFakeEvent(lastTextAreaModified);
-  }
 
   return updatedCaptionsList;
 }
