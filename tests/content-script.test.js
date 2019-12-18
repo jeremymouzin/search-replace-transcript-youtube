@@ -9,6 +9,12 @@ function fakeTextArea(textContent) {
   };
 }
 
+// Generic function to call to test caption update
+function testCaptionUpdate(testTitle, searchExpression, replaceExpression, captions, updatedCaptions) {
+  const fakeCaption = [fakeTextArea(captions)];
+  expect(searchAndReplace(fakeCaption, searchExpression, replaceExpression)).toEqual([updatedCaptions]);
+}
+
 describe('Single word replacements', () => {
   it.each([
     [
@@ -47,10 +53,7 @@ manipulate the dom is JavaScript`,
       `The dominant language to
 manipulate the DOM is JavaScript`,
     ],
-  ])('%s', (testTitle, searchExpression, replaceExpression, captions, updatedCaptions) => {
-    const fakeCaption = [fakeTextArea(captions)];
-    expect(searchAndReplace(fakeCaption, searchExpression, replaceExpression)).toEqual([updatedCaptions]);
-  });
+  ])('%s', testCaptionUpdate);
 });
 
 describe('Several words replacement', () => {
@@ -91,8 +94,5 @@ code, shall we?`,
       `Let's talk about Visual Studio Code,
 shall we?`,
     ],
-  ])('%s', (testTitle, searchExpression, replaceExpression, captions, updatedCaptions) => {
-    const fakeCaption = [fakeTextArea(captions)];
-    expect(searchAndReplace(fakeCaption, searchExpression, replaceExpression)).toEqual([updatedCaptions]);
-  });
+  ])('%s', testCaptionUpdate);
 });
