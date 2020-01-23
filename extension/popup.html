@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Search and replace in YouTube transcripts</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Search and replace in YouTube transcripts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <form id="form">
     <h1>Search and replace</h1>
-    <form id="form">
-      <label for="search">Search for...</label>
-      <input type="text" name="search" id="search" autofocus />
-      <label for="replace">and replace by...</label>
-      <input type="text" name="replace" id="replace" />
-      <input type="checkbox" name="insensitive-search" id="insensitive-search">
-      <label for="insensitive-search">Case insensitive search</label>
-      <input type="submit" value="Replace" />
-    </form>
+    <label for="search">Search for...</label>
+    <input type="text" name="search" id="search" autofocus />
+    <label for="replace">and replace by...</label>
+    <input type="text" name="replace" id="replace" />
+    <input type="checkbox" name="insensitive-search" id="insensitive-search">
+    <label for="insensitive-search" class="insensitive-search-label">Case insensitive search</label>
+    <input type="submit" value="Replace" />
+  </form>
 
-    <button id="preprocessButton">Preprocess</button>
-    <a href="options.html" target="_blank">Edit words list to preprocess</a>
+  <div class="preprocess-footer">
+    <button id="preprocess-button">Preprocess</button>
+    <a href="options.html" target="_blank" class="mini-link">Edit words list to preprocess</a>
+  </div>
+  <script src="popup.js"></script>
+</body>
 
-    <script src="popup.js"></script>
-  </body>
 </html>

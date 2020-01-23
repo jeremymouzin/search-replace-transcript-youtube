@@ -4,7 +4,7 @@ const form = document.getElementById('form');
 const searchInput = document.getElementById('search');
 const replaceInput = document.getElementById('replace');
 const caseInsensitiveSearch = document.getElementById('insensitive-search');
-const preprocessButton = document.getElementById('preprocessButton');
+const preprocessButton = document.getElementById('preprocess-button');
 
 form.onsubmit = (element) => {
   // Don't reload the page when submitting the form
@@ -29,6 +29,9 @@ form.onsubmit = (element) => {
 
 preprocessButton.onclick = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { preprocess: true });
+    const options = {
+      insensitiveSearch: caseInsensitiveSearch.checked,
+    };
+    chrome.tabs.sendMessage(tabs[0].id, { preprocess: true, options });
   });
 };

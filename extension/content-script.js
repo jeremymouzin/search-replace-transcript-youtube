@@ -97,12 +97,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.preprocess) {
-    const preprocessWordsList = [
-      ['visual studio code', 'Visual Studio Code'],
-      ['vs code', 'VSCode'],
-      ['javascript', 'JavaScript'],
-    ];
-    preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => searchAndReplace(wordsToSearchFor, replacement, options));
+    chrome.storage.sync.get({
+      wordsList: [],
+    }, function (items) {
+      if (items.wordsList.length > 0) {
+        const preprocessWordsList = items.wordsList;
+        preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => searchAndReplace(captionsList, wordsToSearchFor, replacement, options));
+      }
+    });
   }
 
   sendResponse({ data: 'done' });
