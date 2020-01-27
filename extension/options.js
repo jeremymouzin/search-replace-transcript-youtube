@@ -76,22 +76,28 @@ wordsList.addEventListener('keyup', function(event) {
     keyboardTimeoutId = setTimeout(saveOptions, 1000);
   }
   
-  // UX: At the end of the last line, type ENTER to create a new expression
-  // This way the user doesn't have to move the mouse and click!
+  // UX: Ease the editing process with the use of ENTER key (avoid touching the mouse)
   if (event.code === 'Enter') {
     if (event.target.matches('input[name="replacement-expression"]')) {
+      // If you edit the last line replacement expression and type ENTER it will add a new empty line
       if (event.target.parentElement === wordsList.lastElementChild) {
         insertEmptyExpression();
       } else {
-        debugger;
+        // If you're not on the last line, select and focus on the next line search expression
+        event.target.parentElement.nextElementSibling.firstElementChild.select();
       }
+    }
+
+    if (event.target.matches('input[name="search-expression"]')) {
+      // Typing ENTER when editing a search expression will move you to the replacement expression
+      event.target.nextElementSibling.select();
     }
   }
 });
 
 // Add an empty line or an expression that was already saved previously
 function insertNewExpression(searchExpression = "", replacementExpression = "") {
-  wordsList.insertAdjacentHTML('beforeend', `<li><input type="text" placeholder="Search expression" value="${searchExpression}"/>
+  wordsList.insertAdjacentHTML('beforeend', `<li><input type="text" placeholder="Search expression" value="${searchExpression}" name="search-expression"/>
     →
     <input type="text" placeholder="Replacement" value="${replacementExpression}" name="replacement-expression"/><span class="fas fa-trash trash-icon" tabindex="0"></span></li>
     `);

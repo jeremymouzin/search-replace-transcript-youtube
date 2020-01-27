@@ -1,6 +1,8 @@
 :root {
   --primary-color: cornflowerblue;
   --accent-color: rgb(255, 192, 203);
+  --hint-color: rgba(0, 0, 0, 0.4);
+  --list-background-color: rgba(0,0,0,.05);
 }
 
 body {
@@ -41,7 +43,7 @@ input[type="text"] {
 
 .preprocess-footer {
   padding: 0 1em 1em 1em;
-  background-color: rgba(0,0,0,.05);
+  background-color: var(--list-background-color);
   text-align: center;
 }
 
@@ -75,6 +77,13 @@ input[type="submit"], button {
 .words-container {
   max-width: 600px;
   padding: 0 1em;
+  line-height: 1.5;
+}
+
+.ux-hint {
+  color: var(--hint-color);
+  border-left: 8px solid var(--list-background-color);
+  padding-left: .5em;
 }
 
 #add {
@@ -94,7 +103,7 @@ input[type="submit"], button {
 
 #words-list li {
   list-style: none;
-  background-color: rgba(0,0,0,.05);
+  background-color: var(--list-background-color);
   padding: 8px 0 8px 8px;
   border-radius: 6px;
   display: inline-block;
