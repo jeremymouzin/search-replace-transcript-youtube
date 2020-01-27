@@ -1,7 +1,7 @@
 {
-  "name": "Search Replace Transcript YouTube",
-  "version": "1.0",
-  "description": "This extension lets you search and replace words while editing your YouTube video transcripts in the official online editor.",
+  "name": "Find and replace for YouTube Subtitles",
+  "version": "1.0.1",
+  "description": "Fix misspelled words in YouTube transcripts with a single click!",
   "background": {
     "scripts": ["background.js"],
     "persistent": false
