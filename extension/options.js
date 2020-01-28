@@ -59,6 +59,8 @@ function restoreOptions() {
 
 let keyboardTimeoutId = 0;
 
+// 🇫🇷 Notifie et initie la sauvegarde des données après un délai
+// 🇬🇧 Notify and initiate the data saving after a delay
 function initSave() {
   clearTimeout(keyboardTimeoutId);
   autosaveMessage.classList.add('saving');
