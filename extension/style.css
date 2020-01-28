@@ -134,14 +134,14 @@ button.trash-icon {
   height: 50px;
 }
 
-.autosave {
+#autosave {
   color: var(--hint-color);
   text-transform: uppercase;
   font-size: 0.8em;
   letter-spacing: 0.8px;
 }
 
-.autosave::before {
+#autosave::before {
   content: '';
   display: inline-block;
   width: 12px;
@@ -153,6 +153,7 @@ button.trash-icon {
   margin-right: 0.3em;
 }
 
+#autosave.saving::before {
   border: 3px solid var(--list-background-color);
   border-top: 3px solid var(--green);
   background-color: transparent;
