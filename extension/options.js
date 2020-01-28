@@ -87,7 +87,7 @@ wordsList.addEventListener('click', function (e) {
 
 // 🇫🇷 UX: Sauvegarde automatiquement après avoir tapé une touche
 // 🇬🇧 UX: Autosave after hitting a key
-wordsList.addEventListener('keyup', function (event) {
+wordsList.addEventListener('keydown', function (event) {
   // 🇫🇷 Ne sauvegarde pas quand on se déplace juste avec le clavier
   // 🇬🇧 Don't save when moving around with the keyboard
   if (event.code !== 'Tab' && event.key !== 'Shift' && event.code !== 'Enter') {
