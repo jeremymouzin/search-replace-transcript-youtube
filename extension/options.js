@@ -57,6 +57,15 @@ function restoreOptions() {
   });
 }
 
+let keyboardTimeoutId = 0;
+
+function initSave() {
+  clearTimeout(keyboardTimeoutId);
+  autosaveMessage.classList.add('saving');
+  autosaveMessage.textContent = "Saving modifications...";
+  keyboardTimeoutId = setTimeout(saveOptions, 500);
+}
+
 // 🇫🇷 Restaure les options dès que la page est complètement chargée
 // 🇬🇧 Restores options as soon as the page is loaded
 document.addEventListener('DOMContentLoaded', restoreOptions);
@@ -72,21 +81,17 @@ addButton.addEventListener('click', () => {
 wordsList.addEventListener('click', function (e) {
   if (e.target.matches('.trash-icon')) {
     e.target.parentElement.remove();
-    saveOptions();
+    initSave();
   }
 });
 
 // 🇫🇷 UX: Sauvegarde automatiquement après avoir tapé une touche
 // 🇬🇧 UX: Autosave after hitting a key
-let keyboardTimeoutId = 0;
 wordsList.addEventListener('keyup', function (event) {
   // 🇫🇷 Ne sauvegarde pas quand on se déplace juste avec le clavier
   // 🇬🇧 Don't save when moving around with the keyboard
   if (event.code !== 'Tab' && event.key !== 'Shift' && event.code !== 'Enter') {
-    clearTimeout(keyboardTimeoutId);
-    autosaveMessage.classList.add('saving');
-    autosaveMessage.textContent = "Saving modifications...";
-    keyboardTimeoutId = setTimeout(saveOptions, 500);
+    initSave();
   }
 
   // 🇫🇷 UX: Facilite le processus d'édition grâce à la toucher ENTREE (pour éviter de toucher la souris)
