@@ -58,7 +58,7 @@ document.getElementById('add').addEventListener('click', () => {
 
 // Manage delete button
 wordsList.addEventListener('click', function(e) {
-  if (e.target.matches('span')) {
+  if (e.target.matches('.trash-icon')) {
     e.target.parentElement.remove();
     saveOptions();
   }
@@ -98,7 +98,7 @@ wordsList.addEventListener('keyup', function(event) {
 function insertNewExpression(searchExpression = "", replacementExpression = "") {
   wordsList.insertAdjacentHTML('beforeend', `<li><input type="text" placeholder="Search expression" value="${searchExpression}" name="search-expression"/>
     →
-    <input type="text" placeholder="Replacement" value="${replacementExpression}" name="replacement-expression"/><span class="fas fa-trash trash-icon" tabindex="0"></span></li>
+    <input type="text" placeholder="Replacement" value="${replacementExpression}" name="replacement-expression"/><button class="fas fa-trash trash-icon" tabindex="0"></button></li>
     `);
 }
 
