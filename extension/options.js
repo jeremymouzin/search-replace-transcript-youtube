@@ -1,10 +1,9 @@
 // Let's grab useful elements
 const wordsList = document.getElementById('words-list');
-const flashAutoSave = document.querySelector('.flash-autosave');
+const autosaveMessage = document.querySelector('.autosave');
 
 // Saves options to chrome.storage
 function saveOptions() {
-  console.log("Saving options");
   const list = document.querySelectorAll("li");
 
   if (list.length > 0) {
@@ -27,10 +26,8 @@ function saveOptions() {
   }
 
   // Flash for autosaving
-  flashAutoSave.classList.add('flash-open');
-  setTimeout(function () {
-    flashAutoSave.classList.remove('flash-open');
-  }, 1500);
+  autosaveMessage.classList.remove('saving');
+  autosaveMessage.textContent = "Done";
 }
 
 // Restores words list
@@ -73,7 +70,9 @@ wordsList.addEventListener('keyup', function(event) {
   // Don't save when moving around with the keyboard
   if (event.code !== 'Tab' && event.key !== 'Shift' && event.code !== 'Enter') {
     clearTimeout(keyboardTimeoutId);
-    keyboardTimeoutId = setTimeout(saveOptions, 1000);
+    autosaveMessage.classList.add('saving');
+    autosaveMessage.textContent = "Saving modifications...";
+    keyboardTimeoutId = setTimeout(saveOptions, 500);
   }
   
   // UX: Ease the editing process with the use of ENTER key (avoid touching the mouse)

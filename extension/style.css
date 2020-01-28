@@ -3,6 +3,7 @@
   --accent-color: rgb(255, 192, 203);
   --hint-color: rgba(0, 0, 0, 0.4);
   --list-background-color: rgba(0,0,0,.05);
+  --green: rgb(151, 228, 115);
 }
 
 body {
@@ -125,26 +126,37 @@ input[type="submit"], button {
   box-shadow: 0 0 4px 2px var(--accent-color);
 }
 
-.flash-autosave {
-  width: 200px;
-  height: 56px;
-  line-height: 56px;
-  color: #293D1A;
-  background-color: #9DEB61;
-  border-radius: 6px;
-  text-align: center;
-  position: fixed;
-  transform: translateY(-200%);
-  left: 200px;
-  box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.15);
-  transition: all .2s ease-in-out;
+.autosave {
+  color: var(--hint-color);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.8px;
 }
 
-.flash-autosave span {
-  color: #293D1A;
-  margin-right: 8px;
+.autosave::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  vertical-align: text-top;
+  border: 4px solid var(--green);
+  background-color: var(--green);
+  border-radius: 50%;
+  margin-right: 0.3em;
 }
 
-.flash-open {
-  transform: translateY(0%);
+.autosave.saving::before {
+  border: 4px solid var(--list-background-color);
+  border-top: 4px solid var(--green);
+  background-color: transparent;
+  animation: autorotate linear 1s infinite;
+}
+
+@keyframes autorotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(1turn);
+  }
 }
