@@ -26,13 +26,3 @@ Open the extension panel with CTRL+SHIFT+F
 
 # You want to contribute?
 Just submit a pull request, I'll be happy to review it and integrate it 😃. Thanks!
-
-# JavaScript training (self promotion inside™️)
-
-I built this extension for my online video training course and my students (so they can study it).
-
-I'm a JavaScript teacher. You can find my full beginners training program on [JavaScript de Zéro](https://www.javascriptdezero.com) (in French 🇫🇷).
-
-Feel free to contact me on jeremy@javascriptdezero.com.
-
-Cheers! 🍻
