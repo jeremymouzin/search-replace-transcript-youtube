@@ -1,5 +1,6 @@
 :root {
-  --primary-color: cornflowerblue;
+  --primary-color: hsl(219, 79%, 66%);
+  --primary-color-light: hsl(219, 79%, 75%);
   --accent-color: rgb(255, 192, 203);
   --hint-color: rgba(0, 0, 0, 0.4);
   --list-background-color: rgba(0,0,0,.05);
@@ -69,6 +70,16 @@ input[type="submit"], button {
   height: 3em;
   color: white;
   cursor: pointer;
+}
+
+input[type="submit"].clicked, button.clicked {
+  background-color: var(--primary-color-light);
+  border-color: var(--primary-color-light);
+}
+
+input[type="submit"]:active, button:active {
+  background-color: var(--primary-color-light);
+  border-color: var(--primary-color-light);
 }
 
 /*
