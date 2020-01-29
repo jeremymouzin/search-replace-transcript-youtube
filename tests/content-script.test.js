@@ -32,7 +32,7 @@ const TIMEOUT_IN_MS = 200;
 // Generic functions to call to test caption updates
 function testCaptionUpdate(testTitle, searchExpression, replacementExpression, captions, updatedCaptions, options) {
   const fakeCaption = [fakeTextArea(captions)];
-  expect(searchAndReplace(fakeCaption, searchExpression, replacementExpression, options)).toEqual([updatedCaptions]);
+  expect(searchAndReplace(fakeCaption, searchExpression, replacementExpression, options).updatedCaptionsList).toEqual([updatedCaptions]);
 }
 
 function groupTest(testTitle, testsSet, options) {

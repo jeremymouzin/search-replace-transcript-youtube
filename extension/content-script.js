@@ -35,6 +35,7 @@ function dispatchFakeEvent(element) {
 }
 
 function searchAndReplace(captionsList, searchExpression, replacementExpression, options) {
+  let numberOfMatchesReplaced = 0;
   const updatedCaptionsList = captionsList.map((textArea) => {
     // 🇫🇷 Gère les recherches sur plusieurs mots et plusieurs lignes
     // 🇬🇧 Manage the search of a several words expression on multiple lines
@@ -71,6 +72,7 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression,
 
       textArea.textContent = newReplacedExpression;
       textArea.value = newReplacedExpression;
+      numberOfMatchesReplaced++;
 
       // 🇫🇷 Dispatche le faux évènement pour que le système YouTube prenne en compte les modifications
       // 🇬🇧 Dispatch a fake event so that YouTube system takes into account the modifications
@@ -82,7 +84,7 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression,
     return originalText;
   });
 
-  return updatedCaptionsList;
+  return { updatedCaptionsList, numberOfMatchesReplaced };
 }
 
 /**
@@ -104,11 +106,8 @@ if (typeof module !== 'undefined') {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const { searchExpression, replacementExpression, options } = request;
 
+  let numberOfMatchesReplaced = 0;
   const captionsList = [...document.querySelectorAll('textarea')];
-
-  if (searchExpression && replacementExpression) {
-    searchAndReplace(captionsList, searchExpression, replacementExpression, options);
-  }
 
   // 🇫🇷 Si on a cliqué sur le bouton preprocess dans le formulaire du popup, on processe la liste des mots
   // 🇬🇧 If we clicked on the prepocess button in the popup form, process the words list
@@ -118,11 +117,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }, function (items) {
       if (items.wordsList.length > 0) {
         const preprocessWordsList = items.wordsList;
-        preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => searchAndReplace(captionsList, wordsToSearchFor, replacement, options));
+        preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => {
+          const result = searchAndReplace(captionsList, wordsToSearchFor, replacement, options);
+          numberOfMatchesReplaced += result.numberOfMatchesReplaced;
+        });
       }
+      sendResponse({ data: 'done', numberOfMatchesReplaced });
     });
+  } else {
+    if (searchExpression && replacementExpression) {
+      const result = searchAndReplace(captionsList, searchExpression, replacementExpression, options);
+      numberOfMatchesReplaced += result.numberOfMatchesReplaced;
+      sendResponse({ data: 'done', numberOfMatchesReplaced });
+    }
   }
-
-  sendResponse({ data: 'done' });
+  
   return true;
 });

@@ -37,14 +37,28 @@ input[type="text"] {
   vertical-align: middle;
 }
 
+.container-matches {
+  text-align: center;
+  padding: 0 1em;
+}
+
+.matches {
+  font-size: 0.8em;
+  color: green;
+  border-radius: 16px;
+  background-color: var(--green);
+  display: none;
+  padding: 0.4em 1em 0.5em;
+  margin: 0 0 1em 0;
+  font-weight: 600;
+}
+
 .mini-link {
   font-size: 0.7em;
-  text-align: center;
-  /* display: block; */
 }
 
 .preprocess-footer {
-  padding: 0 1em 1em 1em;
+  padding: 0 1em 1em;
   background-color: var(--list-background-color);
   text-align: center;
 }
