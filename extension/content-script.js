@@ -1,7 +1,10 @@
 /* global document, chrome, InputEvent */
 
 /**
- * We generate a fake event, as if we typed on the keyboard within a textarea to
+ * 🇫🇷 On génère un faux évènement, comme si on avait tapé sur le clavier à l'intérieur
+ * de la textearea pour modifier le sous-titre. C'est utilisé pour déclencher le code
+ * JavaScript qui gère les mises à jour et la sauvegarde automatique dans l'éditeur.
+ * 🇬🇧 We generate a fake event, as if we typed on the keyboard within a textarea to
  * modify a caption. This is needed to trigger the JavaScript code that handles
  * updates and autosave the new content in the online editor.
  */
@@ -33,11 +36,13 @@ function dispatchFakeEvent(element) {
 
 function searchAndReplace(captionsList, searchExpression, replacementExpression, options) {
   const updatedCaptionsList = captionsList.map((textArea) => {
-    // Manage the search of a several words expression on multiple lines
+    // 🇫🇷 Gère les recherches sur plusieurs mots et plusieurs lignes
+    // 🇬🇧 Manage the search of a several words expression on multiple lines
     const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
     let robustReplacementExpression = replacementExpression;
 
-    // We use a RegExp to replace *all* occurences of the searched expression
+    // 🇫🇷 On utilise une RegExp pour remplacer *toutes* les occurences de l'expression recherchée
+    // 🇬🇧 We use a RegExp to replace *all* occurences of the searched expression
     const searchRegExpFlags = options.insensitiveSearch ? 'gi' : 'g';
     let searchRegExp = new RegExp(`\\b${robustSearchExpression}\\b`, searchRegExpFlags);
     const originalText = textArea.value;
@@ -46,7 +51,10 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression,
     if (result !== null) {
       const match = result[0];
       /**
-       * If it's several words on different lines, manage the new line correctly
+       * 🇫🇷 Si on trouve plusieurs mots sur différentes lignes, on gère le retour à la ligne
+       * correctement et on inclut n'importe quel caractère suivant qui n'est pas un espace
+       * (comme une virgule, un point etc.)
+       * 🇬🇧 If we find several words on different lines, manage the carriage return correctly
        * and include any trailing char that is not a space (like a comma, a dot etc.)
        */
       if (match.includes('\n')) {
@@ -61,11 +69,11 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression,
 
       const newReplacedExpression = originalText.replace(searchRegExp, robustReplacementExpression);
 
-      // Update textarea inputs values
       textArea.textContent = newReplacedExpression;
       textArea.value = newReplacedExpression;
 
-      // Dispatch a fake event so that YouTube system takes into account my modifications
+      // 🇫🇷 Dispatche le faux évènement pour que le système YouTube prenne en compte les modifications
+      // 🇬🇧 Dispatch a fake event so that YouTube system takes into account the modifications
       dispatchFakeEvent(textArea);
 
       return newReplacedExpression;
@@ -77,15 +85,21 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression,
   return updatedCaptionsList;
 }
 
-// This is the hook for unit testing with Jest
-// The module object is not defined when running the extension in Chrome. To avoid
-// any issue, we execute the affectation only when we run the tests (ie when module is defined).
+/**
+ * 🇫🇷 Ceci est un hook pour les tests unitaires avec Jest
+ * L'objet module n'est pas défini quand on exécute l'extension dans Chrome. Pour éviter des
+ * problèmes, on exécute l'affectation seulement quand on exécute les tests (quand module est défini).
+ * 🇬🇧 This is the hook for unit testing with Jest
+ * The module object is not defined when running the extension in Chrome. To avoid
+ * any issue, we execute the affectation only when we run the tests (ie when module is defined).
+ */
 if (typeof module !== 'undefined') {
   module.exports = searchAndReplace;
 }
 
 /**
- * Listen to requests coming from the popup form
+ * 🇫🇷 On écoute les requêtes venant du formulaire popup
+ * 🇬🇧 Listen to requests coming from the popup form
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const { searchExpression, replacementExpression, options } = request;
@@ -96,6 +110,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     searchAndReplace(captionsList, searchExpression, replacementExpression, options);
   }
 
+  // 🇫🇷 Si on a cliqué sur le bouton preprocess dans le formulaire du popup, on processe la liste des mots
+  // 🇬🇧 If we clicked on the prepocess button in the popup form, process the words list
   if (request.preprocess) {
     chrome.storage.sync.get({
       wordsList: [],
