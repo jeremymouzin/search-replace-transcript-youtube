@@ -114,7 +114,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.preprocess) {
     chrome.storage.sync.get({
       wordsList: [],
-    }, function (items) {
+    }, (items) => {
       if (items.wordsList.length > 0) {
         const preprocessWordsList = items.wordsList;
         preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => {
@@ -128,9 +128,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (searchExpression && replacementExpression) {
       const result = searchAndReplace(captionsList, searchExpression, replacementExpression, options);
       numberOfMatchesReplaced += result.numberOfMatchesReplaced;
-      sendResponse({ data: 'done', numberOfMatchesReplaced });
     }
+    sendResponse({ data: 'done', numberOfMatchesReplaced });
   }
-  
+
   return true;
 });
