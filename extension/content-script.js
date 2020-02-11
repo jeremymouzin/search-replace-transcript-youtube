@@ -88,18 +88,6 @@ function searchAndReplace(captionsList, searchExpression, replacementExpression,
 }
 
 /**
- * 🇫🇷 Ceci est un hook pour les tests unitaires avec Jest
- * L'objet module n'est pas défini quand on exécute l'extension dans Chrome. Pour éviter des
- * problèmes, on exécute l'affectation seulement quand on exécute les tests (quand module est défini).
- * 🇬🇧 This is the hook for unit testing with Jest
- * The module object is not defined when running the extension in Chrome. To avoid
- * any issue, we execute the affectation only when we run the tests (ie when module is defined).
- */
-if (typeof module !== 'undefined') {
-  module.exports = searchAndReplace;
-}
-
-/**
  * 🇫🇷 On écoute les requêtes venant du formulaire popup
  * 🇬🇧 Listen to requests coming from the popup form
  */
@@ -134,3 +122,75 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   return true;
 });
+
+function replaceCharAt(text, position, newChar) {
+  if (position >= text.length) return text;
+  return text.slice(0, position) + newChar + text.slice(position + 1);
+}
+
+function addCharAt(text, position, newChar) {
+  if (position > text.length) return text;
+  return text.slice(0, position) + newChar + text.slice(position);
+}
+
+function createStartOfSentence(text, cursorPosition) {
+  let newText = text;
+  while (cursorPosition >= 0) {
+    const currentCharacter = text[cursorPosition];
+    if (currentCharacter === ' ' || currentCharacter === '\n' || cursorPosition === 0) {
+      // We add a dot only if there is other words before
+      if (cursorPosition > 0) {
+        newText = replaceCharAt(newText, cursorPosition + 1, newText[cursorPosition + 1].toUpperCase());
+        // If there is already a dot, don't add one
+        if (newText[cursorPosition - 1] !== '.') {
+          newText = addCharAt(newText, cursorPosition, '.');
+        }
+      } else {
+        newText = replaceCharAt(newText, cursorPosition, newText[cursorPosition].toUpperCase());
+      }
+      return newText;
+    }
+    cursorPosition--;
+  }
+  return newText;
+}
+
+let shiftKeyPressedCounter = 0;
+document.addEventListener('keyup', (e) => {
+  if (e.key === 'Shift') {
+    shiftKeyPressedCounter++;
+
+    if (shiftKeyPressedCounter < 2) {
+      // If SHIFT is not pressed again quickly, reset the counter
+      setTimeout(() => {
+        shiftKeyPressedCounter = 0;
+      }, 500);
+    } else if (document.activeElement.matches('.timed-event-line-box textarea')) {
+      const textArea = document.activeElement;
+
+      // If there is no selection...
+      if (textArea.selectionStart === textArea.selectionEnd) {
+        const cursorPosition = textArea.selectionStart;
+        const currentText = textArea.value;
+
+        textArea.value = createStartOfSentence(currentText, cursorPosition);
+        textArea.selectionStart = cursorPosition;
+        textArea.selectionEnd = cursorPosition;
+
+        dispatchFakeEvent(textArea);
+      }
+    }
+  }
+});
+
+/**
+ * 🇫🇷 Ceci est un hook pour les tests unitaires avec Jest
+ * L'objet module n'est pas défini quand on exécute l'extension dans Chrome. Pour éviter des
+ * problèmes, on exécute l'affectation seulement quand on exécute les tests (quand module est défini).
+ * 🇬🇧 This is the hook for unit testing with Jest
+ * The module object is not defined when running the extension in Chrome. To avoid
+ * any issue, we execute the affectation only when we run the tests (ie when module is defined).
+ */
+if (typeof module !== 'undefined') {
+  module.exports = { searchAndReplace, createStartOfSentence };
+}

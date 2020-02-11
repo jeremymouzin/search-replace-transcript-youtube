@@ -15,7 +15,7 @@
 
 
 /* eslint-disable jest/valid-describe */
-const searchAndReplace = require('../extension/content-script');
+const { searchAndReplace, createStartOfSentence } = require('../extension/content-script');
 
 // Mimick the textarea HTML input of the document
 function fakeTextArea(textContent) {
@@ -198,3 +198,23 @@ describe.each([
     { insensitiveSearch: true },
   ],
 ])('%s', groupTest, TIMEOUT_IN_MS);
+
+/**
+ * Create start of sentences
+ */
+describe('Start of sentences feature', () => {
+  it('Should create the start of a sentence', () => {
+    expect(createStartOfSentence('here we go !', 2)).toEqual('Here we go !');
+  });
+  it('Should create the start of a sentence in the middle of a sentence', () => {
+    expect(createStartOfSentence('it ends there here we go !', 16)).toEqual('it ends there. Here we go !');
+  });
+  it('Should create the start of a sentence in the middle of a sentence on multiple lines', () => {
+    expect(createStartOfSentence(`it ends there
+here we go !`, 16)).toEqual(`it ends there.
+Here we go !`);
+  });
+  it('Should create the start of a sentence after the end of another sentence', () => {
+    expect(createStartOfSentence('it ends there. here we go !', 16)).toEqual('it ends there. Here we go !');
+  });
+});
