@@ -5,11 +5,12 @@
   ],
   "rules": {
     "no-param-reassign": [
-      "error",
+      "off",
       {
         "props": false,
       }
     ],
+    "no-plusplus": "off",
     "max-len": [
       "error",
       {
