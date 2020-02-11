@@ -1,3 +1,5 @@
+/* globals chrome, document */
+
 const wordsList = document.getElementById('words-list');
 const autosaveMessage = document.getElementById('autosave');
 const addButton = document.getElementById('add');
@@ -5,12 +7,12 @@ const addButton = document.getElementById('add');
 // 🇫🇷 Sauvegarde la liste de mots dans le stockage local grâce à l'API chrome.storage
 // 🇬🇧 Save words list into local storage through chrome.storage API
 function saveOptions() {
-  const list = document.querySelectorAll("li");
+  const list = document.querySelectorAll('li');
 
   if (list.length > 0) {
     const optionsToSave = {
       wordsList: [],
-    }
+    };
 
     for (const item of list) {
       const [searchExpression, replacementExpression] = item.children;
@@ -29,7 +31,7 @@ function saveOptions() {
   }
 
   autosaveMessage.classList.remove('saving');
-  autosaveMessage.textContent = "Done";
+  autosaveMessage.textContent = 'Done';
 }
 
 // 🇫🇷 Restaure la liste de mots depuis le stockage local
@@ -37,7 +39,7 @@ function saveOptions() {
 function restoreOptions() {
   chrome.storage.sync.get({
     wordsList: [],
-  }, function (items) {
+  }, (items) => {
     // 🇫🇷 S'il n'y a aucun mot de stocké...
     // 🇬🇧 If there is no stored word...
     if (items.wordsList.length <= 0) {
@@ -64,7 +66,7 @@ let keyboardTimeoutId = 0;
 function initSave() {
   clearTimeout(keyboardTimeoutId);
   autosaveMessage.classList.add('saving');
-  autosaveMessage.textContent = "Saving modifications...";
+  autosaveMessage.textContent = 'Saving modifications...';
   keyboardTimeoutId = setTimeout(saveOptions, 500);
 }
 
@@ -80,7 +82,7 @@ addButton.addEventListener('click', () => {
 
 // 🇫🇷 Gère les boutons de suppression
 // 🇬🇧 Manage delete buttons
-wordsList.addEventListener('click', function (e) {
+wordsList.addEventListener('click', (e) => {
   if (e.target.matches('.trash-icon')) {
     e.target.parentElement.remove();
     initSave();
@@ -89,7 +91,7 @@ wordsList.addEventListener('click', function (e) {
 
 // 🇫🇷 UX: Sauvegarde automatiquement après avoir tapé une touche
 // 🇬🇧 UX: Autosave after hitting a key
-wordsList.addEventListener('keydown', function (event) {
+wordsList.addEventListener('keydown', (event) => {
   // 🇫🇷 Ne sauvegarde pas quand on se déplace juste avec le clavier
   // 🇬🇧 Don't save when moving around with the keyboard
   if (event.code !== 'Tab' && event.key !== 'Shift' && event.code !== 'Enter') {
@@ -121,7 +123,7 @@ wordsList.addEventListener('keydown', function (event) {
 
 // 🇫🇷 Ajoute une ligne vide ou une expression déjà sauvegardée précédemment
 // 🇬🇧 Add an empty line or an expression that was already saved previously
-function insertNewExpression(searchExpression = "", replacementExpression = "") {
+function insertNewExpression(searchExpression = '', replacementExpression = '') {
   wordsList.insertAdjacentHTML('beforeend', `
 <li>
   <input type="text" placeholder="Search expression" value="${searchExpression}" name="search-expression"/>
