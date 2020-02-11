@@ -53,7 +53,7 @@ function restoreOptions() {
       // 🇫🇷 S'il y a des mots stockés, on les ajoute à la liste
       // 🇬🇧 If there are stored words, we add them to the list
       for (const [searchExpression, replacementExpression] of items.wordsList) {
-        insertNewExpression(searchExpression, replacementExpression);
+        insertNewExpression(searchExpression, replacementExpression, 'beforeend');
       }
     }
   });
@@ -104,7 +104,8 @@ wordsList.addEventListener('keydown', (event) => {
     if (event.target.matches('input[name="replacement-expression"]')) {
       // 🇫🇷 Si tu édites l'expression de remplacement de la dernière ligne et tape ENTREE ça ajoutera une nouvelle ligne
       // 🇬🇧 If you edit the last line replacement expression and type ENTER it will add a new empty line
-      if (event.target.parentElement === wordsList.lastElementChild) {
+      if (event.target.parentElement === wordsList.lastElementChild
+        || event.target.parentElement === wordsList.firstElementChild) {
         insertEmptyExpression();
       } else {
         // 🇫🇷 Si on n'est pas sur la dernière ligne, sélectionne et focus sur l'expression de recherche de la ligne suivante
@@ -123,8 +124,8 @@ wordsList.addEventListener('keydown', (event) => {
 
 // 🇫🇷 Ajoute une ligne vide ou une expression déjà sauvegardée précédemment
 // 🇬🇧 Add an empty line or an expression that was already saved previously
-function insertNewExpression(searchExpression = '', replacementExpression = '') {
-  wordsList.insertAdjacentHTML('beforeend', `
+function insertNewExpression(searchExpression = '', replacementExpression = '', position = 'afterbegin') {
+  wordsList.insertAdjacentHTML(position, `
 <li>
   <input type="text" placeholder="Search expression" value="${searchExpression}" name="search-expression"/>
   →
@@ -137,5 +138,5 @@ function insertNewExpression(searchExpression = '', replacementExpression = '') 
 // 🇬🇧 UX: Focus immediately on the search expression to save one mouse click
 function insertEmptyExpression() {
   insertNewExpression();
-  wordsList.lastElementChild.firstElementChild.focus();
+  wordsList.firstElementChild.firstElementChild.focus();
 }
