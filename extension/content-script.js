@@ -155,15 +155,15 @@ function createStartOfSentence(text, cursorPosition) {
   return newText;
 }
 
-let shiftKeyPressedCounter = 0;
+let keyPressedCounter = 0;
 document.addEventListener('keyup', (e) => {
-  if (e.key === 'Shift') {
-    shiftKeyPressedCounter++;
+  if (e.key === 'Control') {
+    keyPressedCounter++;
 
-    if (shiftKeyPressedCounter < 2) {
-      // If SHIFT is not pressed again quickly, reset the counter
+    if (keyPressedCounter < 2) {
+      // If the key is not pressed again quickly, reset the counter
       setTimeout(() => {
-        shiftKeyPressedCounter = 0;
+        keyPressedCounter = 0;
       }, 500);
     } else if (document.activeElement.matches('.timed-event-line-box textarea')) {
       const textArea = document.activeElement;
