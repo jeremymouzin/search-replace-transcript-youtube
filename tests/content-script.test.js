@@ -217,4 +217,10 @@ Here we go !`);
   it('Should create the start of a sentence after the end of another sentence', () => {
     expect(createStartOfSentence('it ends there. here we go !', 16)).toEqual('it ends there. Here we go !');
   });
+  it("When creating the start of a sentence, it should not add a dot when the last char is a '?'", () => {
+    expect(createStartOfSentence('Does it end here? of course not!', 19)).toEqual('Does it end here? Of course not!');
+  });
+  it("When creating the start of a sentence, it should not add a dot when the last char is a '!'", () => {
+    expect(createStartOfSentence('Does it end here! of course not!', 19)).toEqual('Does it end here! Of course not!');
+  });
 });
