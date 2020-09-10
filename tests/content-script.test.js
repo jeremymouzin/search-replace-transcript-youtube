@@ -81,6 +81,24 @@ manipulate the dom is JavaScript`,
     `The dominant language to
 manipulate the DOM is JavaScript`,
   ],
+  [
+    'should replace words with accents at the beginning of the word',
+    'événements',
+    'évènements',
+    `réseau, si le réseau est en ligne ou pas.
+Les événements liés aux focus au web`,
+    `réseau, si le réseau est en ligne ou pas.
+Les évènements liés aux focus au web`,
+  ],
+  [
+    'should replace words with accents at the end of the word',
+    'présenté',
+    'Présenté',
+    `Tel qu'il est présenté, c'est bien parti.
+Si c'était présenté différemment, ce serait autre chose.`,
+    `Tel qu'il est Présenté, c'est bien parti.
+Si c'était Présenté différemment, ce serait autre chose.`,
+  ],
 ];
 describe.each([
   [
