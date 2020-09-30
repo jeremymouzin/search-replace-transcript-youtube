@@ -37,25 +37,21 @@ function dispatchFakeEvent(element) {
 function searchAndReplace(fullSubtitleText, searchExpression, replacementExpression, options, textArea) {
   let numberOfMatchesReplaced = 0;
 
-  // 🇫🇷 Gère les recherches sur plusieurs mots et plusieurs lignes
-  // 🇬🇧 Manage the search of a several words expression on multiple lines
-  const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
-  const robustReplacementExpression = replacementExpression;
-
   // 🇫🇷 On utilise une RegExp pour remplacer *toutes* les occurences de l'expression recherchée
   // 🇬🇧 We use a RegExp to replace *all* occurences of the searched expression
   const searchRegExpFlags = options.insensitiveSearch ? 'gi' : 'g';
+
   // 🇫🇷 J'utilise une RegExp complexe au lieu de \b car ECMAScript considère que les lettres avec
   // accent sont des limites de mots !
   // 🇬🇧 I use a complex RegExp instead of just \b because ECMAScript considers that accent letters
   // are word limits!
   // See: https://stackoverflow.com/questions/5436824/matching-accented-characters-with-javascript-regexes
-  const searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${robustSearchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
+  const searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${searchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
   const originalText = fullSubtitleText.textContent;
 
   const result = originalText.match(searchRegExp);
   if (result !== null) {
-    const newReplacedExpression = originalText.replace(searchRegExp, robustReplacementExpression);
+    const newReplacedExpression = originalText.replace(searchRegExp, replacementExpression);
 
     fullSubtitleText.textContent = newReplacedExpression;
     fullSubtitleText.value = newReplacedExpression;

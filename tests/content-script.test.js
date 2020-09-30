@@ -127,6 +127,15 @@ is great when spelled correctly`,
     `The JavaScript language
 is great when spelled correctly`,
   ],
+  [
+    'should check for exact several words sentence on the same line',
+    'java script',
+    'JavaScript',
+    `The word javascript alone should not
+be replaced here! But java script should!`,
+    `The word javascript alone should not
+be replaced here! But JavaScript should!`,
+  ],
 ];
 describe.each([
   [
