@@ -122,7 +122,7 @@ document.addEventListener('keyup', (e) => {
       setTimeout(() => {
         keyPressedCounter = 0;
       }, 500);
-    } else if (document.activeElement.matches('.timed-event-line-box textarea')) {
+    } else if (document.activeElement.matches('#textarea-container.ytve-lightweight-textarea > pre + textarea')) {
       const textArea = document.activeElement;
 
       // If there is no selection...
