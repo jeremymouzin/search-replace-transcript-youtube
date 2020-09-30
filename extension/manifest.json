@@ -24,7 +24,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/timedtext_editor*edit_id*"],
+      "matches": [
+        "https://studio.youtube.com/channel/*/translations*",
+        "https://studio.youtube.com/video/*/translations*"
+      ],
       "js": ["content-script.js"]
     }
   ],

@@ -3,7 +3,7 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
     chrome.declarativeContent.onPageChanged.addRules([{
       conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: { urlMatches: 'https://www.youtube.com/timedtext_editor.*edit_id.*' },
+        pageUrl: { urlMatches: 'https://studio.youtube.com/(channel|video)/.*/translations.*' },
       }),
       ],
       actions: [new chrome.declarativeContent.ShowPageAction()],
