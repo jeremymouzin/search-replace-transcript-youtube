@@ -126,33 +126,6 @@ is great when spelled correctly`,
     `The JavaScript language
 is great when spelled correctly`,
   ],
-  [
-    'should handle 2-words expressions broken on two different lines',
-    'java script',
-    'JavaScript',
-    `Starting to learn the java
-script language is a good idea`,
-    `Starting to learn the JavaScript
-language is a good idea`,
-  ],
-  [
-    'should handle several-words expressions broken on two different lines on the first word',
-    'visual studio code',
-    'Visual Studio Code',
-    `Let's talk about visual
-studio code, shall we?`,
-    `Let's talk about Visual Studio Code,
-shall we?`,
-  ],
-  [
-    'should handle several-words expressions broken on two different lines on the second word',
-    'visual studio code',
-    'Visual Studio Code',
-    `Let's talk about visual studio
-code, shall we?`,
-    `Let's talk about Visual Studio Code,
-shall we?`,
-  ],
 ];
 describe.each([
   [

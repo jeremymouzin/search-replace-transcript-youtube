@@ -6,7 +6,7 @@ function searchAndReplace(fullSubtitleText, searchExpression, replacementExpress
   // 🇫🇷 Gère les recherches sur plusieurs mots et plusieurs lignes
   // 🇬🇧 Manage the search of a several words expression on multiple lines
   const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
-  let robustReplacementExpression = replacementExpression;
+  const robustReplacementExpression = replacementExpression;
 
   // 🇫🇷 On utilise une RegExp pour remplacer *toutes* les occurences de l'expression recherchée
   // 🇬🇧 We use a RegExp to replace *all* occurences of the searched expression
@@ -16,29 +16,11 @@ function searchAndReplace(fullSubtitleText, searchExpression, replacementExpress
   // 🇬🇧 I use a complex RegExp instead of just \b because ECMAScript considers that accent letters
   // are word limits!
   // See: https://stackoverflow.com/questions/5436824/matching-accented-characters-with-javascript-regexes
-  let searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${robustSearchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
+  const searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${robustSearchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
   const originalText = fullSubtitleText.textContent;
 
   const result = originalText.match(searchRegExp);
   if (result !== null) {
-    const match = result[0];
-    /**
-     * 🇫🇷 Si on trouve plusieurs mots sur différentes lignes, on gère le retour à la ligne
-     * correctement et on inclut n'importe quel caractère suivant qui n'est pas un espace
-     * (comme une virgule, un point etc.)
-     * 🇬🇧 If we find several words on different lines, manage the carriage return correctly
-     * and include any trailing char that is not a space (like a comma, a dot etc.)
-     */
-    if (match.includes('\n')) {
-      const trailingChar = originalText[searchRegExp.lastIndex];
-
-      if (trailingChar !== ' ') {
-        robustReplacementExpression += trailingChar;
-      }
-      robustReplacementExpression += '\n';
-      searchRegExp = new RegExp(`\\b${robustSearchExpression}${trailingChar}[ ]*`, searchRegExpFlags);
-    }
-
     const newReplacedExpression = originalText.replace(searchRegExp, robustReplacementExpression);
 
     fullSubtitleText.textContent = newReplacedExpression;
