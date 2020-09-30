@@ -1,57 +1,63 @@
 /* global document, chrome */
 
-function searchAndReplace(captionsList, searchExpression, replacementExpression, options) {
+function searchAndReplace(fullSubtitleText, searchExpression, replacementExpression, options, textArea) {
   let numberOfMatchesReplaced = 0;
-  const updatedCaptionsList = captionsList.map((textArea) => {
-    // 🇫🇷 Gère les recherches sur plusieurs mots et plusieurs lignes
-    // 🇬🇧 Manage the search of a several words expression on multiple lines
-    const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
-    let robustReplacementExpression = replacementExpression;
 
-    // 🇫🇷 On utilise une RegExp pour remplacer *toutes* les occurences de l'expression recherchée
-    // 🇬🇧 We use a RegExp to replace *all* occurences of the searched expression
-    const searchRegExpFlags = options.insensitiveSearch ? 'gi' : 'g';
-    // 🇫🇷 J'utilise une RegExp complexe au lieu de \b car ECMAScript considère que les lettres avec
-    // accent sont des limites de mots !
-    // 🇬🇧 I use a complex RegExp instead of just \b because ECMAScript considers that accent letters
-    // are word limits!
-    // See: https://stackoverflow.com/questions/5436824/matching-accented-characters-with-javascript-regexes
-    let searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${robustSearchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
-    const originalText = textArea.value;
+  // 🇫🇷 Gère les recherches sur plusieurs mots et plusieurs lignes
+  // 🇬🇧 Manage the search of a several words expression on multiple lines
+  const robustSearchExpression = searchExpression.replace(/ /g, '([ \\n])*');
+  let robustReplacementExpression = replacementExpression;
 
-    const result = searchRegExp.exec(originalText);
-    if (result !== null) {
-      const match = result[0];
-      /**
-       * 🇫🇷 Si on trouve plusieurs mots sur différentes lignes, on gère le retour à la ligne
-       * correctement et on inclut n'importe quel caractère suivant qui n'est pas un espace
-       * (comme une virgule, un point etc.)
-       * 🇬🇧 If we find several words on different lines, manage the carriage return correctly
-       * and include any trailing char that is not a space (like a comma, a dot etc.)
-       */
-      if (match.includes('\n')) {
-        const trailingChar = originalText[searchRegExp.lastIndex];
+  // 🇫🇷 On utilise une RegExp pour remplacer *toutes* les occurences de l'expression recherchée
+  // 🇬🇧 We use a RegExp to replace *all* occurences of the searched expression
+  const searchRegExpFlags = options.insensitiveSearch ? 'gi' : 'g';
+  // 🇫🇷 J'utilise une RegExp complexe au lieu de \b car ECMAScript considère que les lettres avec
+  // accent sont des limites de mots !
+  // 🇬🇧 I use a complex RegExp instead of just \b because ECMAScript considers that accent letters
+  // are word limits!
+  // See: https://stackoverflow.com/questions/5436824/matching-accented-characters-with-javascript-regexes
+  let searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${robustSearchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
+  const originalText = fullSubtitleText.textContent;
 
-        if (trailingChar !== ' ') {
-          robustReplacementExpression += trailingChar;
-        }
-        robustReplacementExpression += '\n';
-        searchRegExp = new RegExp(`\\b${robustSearchExpression}${trailingChar}[ ]*`, searchRegExpFlags);
+  const result = searchRegExp.exec(originalText);
+  if (result !== null) {
+    const match = result[0];
+    /**
+     * 🇫🇷 Si on trouve plusieurs mots sur différentes lignes, on gère le retour à la ligne
+     * correctement et on inclut n'importe quel caractère suivant qui n'est pas un espace
+     * (comme une virgule, un point etc.)
+     * 🇬🇧 If we find several words on different lines, manage the carriage return correctly
+     * and include any trailing char that is not a space (like a comma, a dot etc.)
+     */
+    if (match.includes('\n')) {
+      const trailingChar = originalText[searchRegExp.lastIndex];
+
+      if (trailingChar !== ' ') {
+        robustReplacementExpression += trailingChar;
       }
-
-      const newReplacedExpression = originalText.replace(searchRegExp, robustReplacementExpression);
-
-      textArea.textContent = newReplacedExpression;
-      textArea.value = newReplacedExpression;
-      numberOfMatchesReplaced++;
-
-      return newReplacedExpression;
+      robustReplacementExpression += '\n';
+      searchRegExp = new RegExp(`\\b${robustSearchExpression}${trailingChar}[ ]*`, searchRegExpFlags);
     }
 
-    return originalText;
-  });
+    const newReplacedExpression = originalText.replace(searchRegExp, robustReplacementExpression);
 
-  return { updatedCaptionsList, numberOfMatchesReplaced };
+    fullSubtitleText.textContent = newReplacedExpression;
+    fullSubtitleText.value = newReplacedExpression;
+
+    /**
+     * 🇫🇷 C'est l'élément <textarea> à côté du <pre> qui doit être mis à jour pour refléter
+     * les changements dans l'interface utilisateur !
+     * 🇬🇧 It's the <textarea> element next to the <pre> that must be updated to reflect changes
+     * on the user interface!
+     */
+    if (textArea) {
+      textArea.value = newReplacedExpression;
+    }
+
+    numberOfMatchesReplaced++;
+  }
+
+  return { updatedFullSubtitleText: fullSubtitleText.textContent, numberOfMatchesReplaced };
 }
 
 /**
@@ -62,7 +68,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const { searchExpression, replacementExpression, options } = request;
 
   let numberOfMatchesReplaced = 0;
-  const captionsList = [...document.querySelectorAll('textarea')];
+  const fullSubtitleText = document.querySelector('#textarea-container.ytve-lightweight-textarea > pre');
+  const textArea = document.querySelector('#textarea-container.ytve-lightweight-textarea > pre + textarea');
 
   // 🇫🇷 Si on a cliqué sur le bouton preprocess dans le formulaire du popup, on processe la liste des mots
   // 🇬🇧 If we clicked on the prepocess button in the popup form, process the words list
@@ -73,7 +80,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (items.wordsList.length > 0) {
         const preprocessWordsList = items.wordsList;
         preprocessWordsList.forEach(([wordsToSearchFor, replacement]) => {
-          const result = searchAndReplace(captionsList, wordsToSearchFor, replacement, options);
+          const result = searchAndReplace(fullSubtitleText, wordsToSearchFor, replacement, options, textArea);
           numberOfMatchesReplaced += result.numberOfMatchesReplaced;
         });
       }
@@ -81,7 +88,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   } else {
     if (searchExpression && replacementExpression) {
-      const result = searchAndReplace(captionsList, searchExpression, replacementExpression, options);
+      const result = searchAndReplace(fullSubtitleText, searchExpression, replacementExpression, options, textArea);
       numberOfMatchesReplaced += result.numberOfMatchesReplaced;
     }
     sendResponse({ data: 'done', numberOfMatchesReplaced });
