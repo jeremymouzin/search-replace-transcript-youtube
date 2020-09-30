@@ -19,7 +19,7 @@ function searchAndReplace(fullSubtitleText, searchExpression, replacementExpress
   let searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${robustSearchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
   const originalText = fullSubtitleText.textContent;
 
-  const result = searchRegExp.exec(originalText);
+  const result = originalText.match(searchRegExp);
   if (result !== null) {
     const match = result[0];
     /**
@@ -54,7 +54,7 @@ function searchAndReplace(fullSubtitleText, searchExpression, replacementExpress
       textArea.value = newReplacedExpression;
     }
 
-    numberOfMatchesReplaced++;
+    numberOfMatchesReplaced = result.length;
   }
 
   return { updatedFullSubtitleText: fullSubtitleText.textContent, numberOfMatchesReplaced };
