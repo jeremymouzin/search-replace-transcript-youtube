@@ -22,6 +22,7 @@ function fakeTextArea(textContent) {
   return {
     textContent,
     value: textContent,
+    dispatchEvent: () => { },
   };
 }
 

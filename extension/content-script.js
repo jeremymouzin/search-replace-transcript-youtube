@@ -1,4 +1,38 @@
-/* global document, chrome */
+/* global document, chrome, InputEvent */
+
+/**
+ * 🇫🇷 On génère un faux évènement, comme si on avait tapé sur le clavier à l'intérieur
+ * de la textearea pour modifier le sous-titre. C'est utilisé pour déclencher le code
+ * JavaScript qui gère les mises à jour et la sauvegarde automatique dans l'éditeur.
+ * 🇬🇧 We generate a fake event, as if we typed on the keyboard within a textarea to
+ * modify a caption. This is needed to trigger the JavaScript code that handles
+ * updates and autosave the new content in the online editor.
+ */
+function dispatchFakeEvent(element) {
+  const event = new InputEvent('input', {
+    bubbles: true,
+    cancelBubble: false,
+    cancelable: false,
+    composed: true,
+    currentTarget: null,
+    data: 'a',
+    dataTransfer: null,
+    defaultPrevented: false,
+    detail: 0,
+    eventPhase: 0,
+    inputType: 'insertText',
+    isComposing: false,
+    isTrusted: false,
+    returnValue: true,
+    sourceCapabilities: null,
+    srcElement: element,
+    target: element,
+    view: null,
+    which: 0,
+  });
+
+  element.dispatchEvent(event);
+}
 
 function searchAndReplace(fullSubtitleText, searchExpression, replacementExpression, options, textArea) {
   let numberOfMatchesReplaced = 0;
@@ -34,6 +68,9 @@ function searchAndReplace(fullSubtitleText, searchExpression, replacementExpress
      */
     if (textArea) {
       textArea.value = newReplacedExpression;
+      // 🇫🇷 Dispatche le faux évènement pour que le système YouTube prenne en compte les modifications
+      // 🇬🇧 Dispatch a fake event so that YouTube system takes into account the modifications
+      dispatchFakeEvent(textArea);
     }
 
     numberOfMatchesReplaced = result.length;
@@ -133,6 +170,8 @@ document.addEventListener('keyup', (e) => {
         textArea.value = createStartOfSentence(currentText, cursorPosition);
         textArea.selectionStart = cursorPosition;
         textArea.selectionEnd = cursorPosition;
+
+        dispatchFakeEvent(textArea);
       }
     }
   }
