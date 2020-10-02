@@ -132,7 +132,7 @@ function createStartOfSentence(text, cursorPosition) {
         newText = replaceCharAt(newText, cursorPosition + 1, newText[cursorPosition + 1].toUpperCase());
         // If there is already an end of sentence character, don't add the dot!
         const previousCharacter = newText[cursorPosition - 1];
-        if (!'.?!'.includes(previousCharacter)) {
+        if (!'.?!\n'.includes(previousCharacter)) {
           newText = addCharAt(newText, cursorPosition, '.');
         }
       } else {

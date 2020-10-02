@@ -223,4 +223,11 @@ Here we go !`);
   it("When creating the start of a sentence, it should not add a period when the last char is a '!'", () => {
     expect(createStartOfSentence('Does it end here! of course not!', 19)).toEqual('Does it end here! Of course not!');
   });
+  it('When creating the start of a sentence, it should not add a period if the line before is blank', () => {
+    expect(createStartOfSentence(`Does it end here!
+
+of course not!`, 19)).toEqual(`Does it end here!
+
+Of course not!`);
+  });
 });
