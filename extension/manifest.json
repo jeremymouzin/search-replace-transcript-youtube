@@ -1,6 +1,6 @@
 {
   "name": "Find and replace for YouTube Subtitles",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Fix misspelled words in YouTube transcripts with a single click!",
   "background": {
     "scripts": ["background.js"],
