@@ -42,11 +42,12 @@ function searchAndReplace(fullSubtitleText, searchExpression, replacementExpress
   const searchRegExpFlags = options.insensitiveSearch ? 'gi' : 'g';
 
   // 🇫🇷 J'utilise une RegExp complexe au lieu de \b car ECMAScript considère que les lettres avec
-  // accent sont des limites de mots !
+  // accent sont des limites de mots ! J'échappe les caractères spéciaux des RegExp également.
   // 🇬🇧 I use a complex RegExp instead of just \b because ECMAScript considers that accent letters
-  // are word limits!
+  // are word limits! I also escape special RegExp chars too.
   // See: https://stackoverflow.com/questions/5436824/matching-accented-characters-with-javascript-regexes
-  const searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${searchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
+  const escapedSearchExpression = searchExpression.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+  const searchRegExp = new RegExp(`(?<![A-Za-z\u00C0-\u017F])${escapedSearchExpression}(?![A-Za-z\u00C0-\u017F])`, searchRegExpFlags);
   const originalText = fullSubtitleText.textContent;
 
   const result = originalText.match(searchRegExp);

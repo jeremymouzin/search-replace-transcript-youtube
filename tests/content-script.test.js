@@ -100,6 +100,18 @@ Si c'était présenté différemment, ce serait autre chose.`,
 Si c'était Présenté différemment, ce serait autre chose.`,
   ],
 ];
+
+// Add a bunch of tests to check for RegExp special char within the word
+for (const specialChar of '.*?+-$^{}()|[]\\') {
+  singleWordsReplacementsTests.push([
+    `should replace words with special RegExp char in it "${specialChar}"`,
+    `c${specialChar}`,
+    `C${specialChar}`,
+    `Le langage c${specialChar} n'existe pas.`,
+    `Le langage C${specialChar} n'existe pas.`,
+  ]);
+}
+
 describe.each([
   [
     'Single words replacements (case insensitive search OFF)',
