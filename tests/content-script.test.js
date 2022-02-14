@@ -1,4 +1,8 @@
 /**
+ * @jest-environment jsdom
+ */
+
+/**
  * Some definitions about the terms I use here.
  *
  * I call a subtitle a caption because originally, I made this to help me create captions for
@@ -12,7 +16,6 @@
  *
  * I call a "caption update" the fact of replacing the search expression by the replacement expression.
  */
-
 
 /* eslint-disable jest/valid-describe */
 const { searchAndReplace, createStartOfSentence } = require('../extension/content-script');

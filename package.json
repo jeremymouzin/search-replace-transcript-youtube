@@ -7,11 +7,11 @@
     "test": "tests"
   },
   "devDependencies": {
-    "eslint": "^6.1.0",
+    "eslint": "^8.9.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-jest": "^23.1.1",
-    "jest": "^24.9.0"
+    "jest": "^27.5.1"
   },
   "scripts": {
     "test": "jest"
