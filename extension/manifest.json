@@ -1,12 +1,11 @@
 {
   "name": "Find and replace for YouTube Subtitles",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Fix misspelled words in YouTube transcripts with a single click!",
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   },
-  "page_action": {
+  "action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icon/icon16.png",
@@ -32,7 +31,7 @@
     }
   ],
   "commands": {
-    "_execute_page_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Shift+F",
         "windows": "Ctrl+Shift+F",
@@ -41,5 +40,5 @@
     }
   },
   "permissions": ["declarativeContent", "activeTab", "storage"],
-  "manifest_version": 2
+  "manifest_version": 3
 }

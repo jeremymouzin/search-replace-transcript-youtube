@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(() => {
         pageUrl: { urlMatches: 'https://studio.youtube.com/(channel|video)/.*/translations.*' },
       }),
       ],
-      actions: [new chrome.declarativeContent.ShowPageAction()],
+      actions: [new chrome.declarativeContent.ShowAction()],
     }]);
   });
 });
